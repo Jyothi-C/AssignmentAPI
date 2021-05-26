@@ -62,7 +62,7 @@ namespace AssetManagementSystem.Controllers
             }
         }
         [HttpDelete]
-        [Route("DeleteAsset/{assetType}/{name}")]
+        [Route("DeleteAsset/{assetType}/{id}")]
         [Authorize(Roles = "admin")]
         public IActionResult DeleteAsset(TypeOfAsset assetType, int id)
         {
