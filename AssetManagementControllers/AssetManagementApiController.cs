@@ -64,10 +64,10 @@ namespace AssetManagementSystem.Controllers
         [HttpDelete]
         [Route("DeleteAsset/{assetType}/{name}")]
         [Authorize(Roles = "admin")]
-        public IActionResult DeleteAsset(TypeOfAsset assetType, string name)
+        public IActionResult DeleteAsset(TypeOfAsset assetType, int id)
         {
-            var asset = DeleteAsset(assetType, name);
-            return Ok(asset);
+            _asset.DeleteAsset(assetType, id);
+            return Ok("Deleted Successfully");
         }
         [HttpPut]
         [Route("Admin/AssignAsset")]

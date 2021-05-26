@@ -159,20 +159,20 @@ namespace AssetManagementSystem.Models
             return assetEdit;
         }
 
-        public void DeleteAsset(TypeOfAsset assetType, string name)
+        public void DeleteAsset(TypeOfAsset assetType, int id)
         {
             switch ((int)assetType)
             {
                 case 1:
-                    var asset = _Context.BookAssets.Find(name);
+                    var asset = _Context.BookAssets.Find(id);
                     _Context.BookAssets.Remove(asset);
                     break;
                 case 2:
-                    var asset1 = _Context.BookAssets.Find(name);
+                    var asset1 = _Context.BookAssets.Find(id);
                     _Context.BookAssets.Remove(asset1);
                     break;
                 case 3:
-                    var asset2 = _Context.BookAssets.Find(name);
+                    var asset2 = _Context.BookAssets.Find(id);
                     _Context.BookAssets.Remove(asset2);
                     break;
             }
