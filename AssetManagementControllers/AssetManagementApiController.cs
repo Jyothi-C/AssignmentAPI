@@ -46,6 +46,14 @@ namespace AssetManagementSystem.Controllers
             var asset1 = _asset.AddAsset(asset);
             return Ok(asset1);
         }
+        [HttpGet]
+        [Route("Details/{assetType}/{id}")]
+        [Authorize(Roles = UserRoleModel.Admin)]
+        public IActionResult Details(TypeOfAsset assetType, int id)
+        {
+            var asset = _asset.Details(assetType, id);
+            return Ok(asset);
+        }
         [HttpPut]
         [Route("UpdateAsset")]
         [Authorize(Roles = "admin")]

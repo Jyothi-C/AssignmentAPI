@@ -1,0 +1,78 @@
+@model IEnumerable<AssetManagementSystem.Models.AssetModel>
+<p>
+    @using (Html.BeginForm("GetAllRequest", "AssetManagement", FormMethod.Get))
+    {
+       
+        <input type="submit" value="AllRequest" class="btn btn-success" />
+        
+    }
+</p>   
+    <p>
+    @Html.ActionLink("Add New", "AddAsset")
+    </p>  
+ 
+    <p>
+    @using (Html.BeginForm("SearchAsset", "AssetManagement", FormMethod.Get))
+    {
+        <b>Search By:</b>
+        @Html.TextBox("Search") <input type="submit" value="Search" class="btn btn-success" />
+        
+    }
+    </p> 
+<h2>Asset Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+         <th>
+            @Html.DisplayNameFor(model => model.Author)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfPublish)
+        </th>
+         <th>
+            @Html.DisplayNameFor(model => model.Genre)
+        </th>
+        <th></th>
+    </tr>
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td> No matches found </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Id.ToString(),"Details", new { assetType = item.AssetType,id = item.Id })
+                </td>
+                <td>
+                    @Html.ActionLink(item.Name,"Details", new {  assetType = item.AssetType,id = item.Id })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfPublish)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @* @Html.ActionLink("Request", "RequestAsset", new {assetType = item.AssetType,id = item.Id }) *@
+                    @Html.ActionLink("Delete","DeleteAsset",new{assetType = item.AssetType,id = item.Id}, new { @class ="btn btn-success" ,
+                    onclick="return confirm('Do you want to Delete the record?')"})
+                </td>
+            </tr>
+        }
+    }
+</table>

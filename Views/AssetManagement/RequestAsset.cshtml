@@ -1,0 +1,69 @@
+@model IEnumerable<AssetManagementSystem.Models.AssetModel>
+
+<h2>Asset List</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Author)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfPublish)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Genre)
+        </th>
+        <th></th>
+    </tr>
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td> No matches found </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelId => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelName => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfPublish)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genre)
+                </td>
+                <td>
+                    @using (Html.BeginForm("RequestAsset", "AssetManagement",new{id = item.Id,
+                    Author=item.Author,
+                    DateOfPublish=item.DateOfPublish,
+                    Genre=item.Genre,
+                    assetType = item.AssetType,
+                    name = item.Name}))
+                    {
+                        <input type="submit" value="Request" class="btn btn-success" />
+                    }
+                </td>
+            </tr>
+            @if (ViewBag.Message != null)
+            {
+                @ViewBag.Message
+            }
+        }
+    }
+</table>

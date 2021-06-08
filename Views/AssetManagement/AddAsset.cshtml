@@ -1,0 +1,107 @@
+@using AssetManagementSystem.Models
+@model AssetManagementSystem.Models.AssetModel
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        <h4>Asset</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+         <div class="form-group">
+            @Html.LabelFor(model => model.DateOfPublish, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DateOfPublish, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateOfPublish, "", new { @class = "text-danger" })
+            </div>
+        </div>
+          <div class="form-group">
+            @Html.LabelFor(model => model.AssetType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.AssetType,
+                    new SelectList(
+                        new List<SelectListItem>
+                        {
+                            new SelectListItem { Text = "Book", Value = ((int)TypeOfAsset.Book).ToString()},
+                            new SelectListItem { Text = "Software", Value = ((int)TypeOfAsset.Software).ToString()},
+                            new SelectListItem { Text = "Hardware", Value = ((int)TypeOfAsset.Hardware).ToString()},
+                        }, "Value", "Text"),
+                    "Select Department",
+                    new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AssetType)
+            </div>
+        </div>
+         <div class="form-group">
+            @Html.LabelFor(model => model.Author, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Author)
+            </div>
+        </div>
+         <div class="form-group">
+            @Html.LabelFor(model => model.Genre, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Genre, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Genre)
+            </div>
+        </div>
+         <div class="form-group">
+            @Html.LabelFor(model => model.SoftwareCompany, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SoftwareCompany, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SoftwareCompany)
+            </div>
+        </div>
+         <div class="form-group">
+            @Html.LabelFor(model => model.OsPlatform, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OsPlatform, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.OsPlatform)
+            </div>
+        </div>
+         <div class="form-group">
+            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Type)
+            </div>
+        </div>
+         <div class="form-group">
+            @Html.LabelFor(model => model.HardwareCompany, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HardwareCompany, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HardwareCompany)
+            </div>
+        </div>
+         <div class="form-group">
+            @Html.LabelFor(model => model.SupportedDevice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SupportedDevice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SupportedDevice)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Add" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+    @if (ViewBag.Message != null)
+    {
+        @ViewBag.Message
+    }
+}
+    <p>
+        @using (Html.BeginForm("SearchAsset", "AssetManagement", FormMethod.Get))
+        {
+            <input type="submit" value="BackToList" class="btn btn-success" />
+        }
+    </p>

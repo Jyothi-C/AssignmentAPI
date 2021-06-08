@@ -1,0 +1,52 @@
+@model AssetManagementSystem.Models.AssetModel
+
+<h2>Asset Details</h2>
+
+<div>
+    <h4>Asset</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+         <dt>
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author)
+        </dd>
+         
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfPublish)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfPublish)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Genre)
+        </dd>
+        
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "UpdateAsset", new {assetType = Model.AssetType, id = Model.Id })
+    @using (Html.BeginForm("SearchAsset", "AssetManagement", FormMethod.Get))
+    {
+    <input type="submit" value="BackToList" class="btn btn-success" />
+    }
+</p>

@@ -53,17 +53,41 @@ namespace AssetManagementSystem.Controllers
         }
         [HttpPost]
         [Route("Employee/Login")]
-        public async Task<string> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            var result = await signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
-            if (result.Succeeded)
+            var user = await userManager.FindByNameAsync(model.UserName);
+            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
-                return "Login Successfully";
+                var userRoles = await userManager.GetRolesAsync(user);
+                var authClaims = new List<Claim>
+              {
+                  new Claim(ClaimTypes.Name,user.UserName),
+                  new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+              };
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddHours(3),
+                    claims: authClaims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+                Response response = new Response()
+                {
+                    Tokens = new JwtSecurityTokenHandler().WriteToken(token),
+                    Expiration = token.ValidTo,
+                    // User = user.UserName,
+                    LoggerMessage = "Login successfully"
+
+                };
+                return Ok(response);
             }
-            else
-            {
-                return "Details are Incorrect";
-            }
+            return Unauthorized();
         }
         [HttpPost]
         [Route("Employee/RequestAsset")]

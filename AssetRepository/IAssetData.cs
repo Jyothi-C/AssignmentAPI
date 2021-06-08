@@ -9,6 +9,7 @@ namespace AssetManagementSystem.Models
         List<AssetModel> SearchAsset(string search);
         AssetModel AddAsset(AssetModel asset);
         AssetModel UpdateAsset(AssetModel asset);
+        AssetModel Details(TypeOfAsset assetType, int id);
         void DeleteAsset(TypeOfAsset assetType, int id);
 
         void RequestAsset(AssetAssign assetAssign);

@@ -120,6 +120,48 @@ namespace AssetManagementSystem.Models
             }));
             return assetList;
         }
+        public AssetModel Details(TypeOfAsset assetType, int id)
+        {
+            List<AssetModel> assetModel = new List<AssetModel>();
+            switch ((int)assetType)
+            {
+                case 1:
+                    assetModel.AddRange(_Context.BookAssets.Where(x => x.Id == id).Select(x => new AssetModel
+                    {
+                        Name = x.Name,
+                        Id = x.Id,
+                        Author = x.Author,
+                        DateOfPublish = x.DateOfPublish,
+                        Genre = x.Genre,
+                        AssetType = TypeOfAsset.Book
+                    }));
+                    break;
+                case 2:
+                    assetModel.AddRange(_Context.SoftwareAssets.Where(x => x.Id == id).Select(x => new AssetModel
+                    {
+                        AssetType = TypeOfAsset.Software,
+                        Id = x.Id,
+                        Name = x.Name,
+                        OsPlatform = x.OsPlatform,
+                        DateOfPublish = x.DateOfPublish,
+                        Type = x.Type,
+                        SoftwareCompany = x.SoftwareCompany
+                    }));
+                    break;
+                case 3:
+                    assetModel.AddRange(_Context.HardwareAssets.Where(x => x.Id == id).Select(x => new AssetModel
+                    {
+                        AssetType = TypeOfAsset.Hardware,
+                        Id = x.Id,
+                        Name = x.Name,
+                        HardwareCompany = x.HardwareCompany,
+                        DateOfPublish = x.DateOfPublish,
+                        SupportedDevice = x.SupportedDevice
+                    }));
+                    break;
+            }
+            return assetModel[0];
+        }
         public AssetModel UpdateAsset(AssetModel assetEdit)
         {
             switch ((int)assetEdit.AssetType)

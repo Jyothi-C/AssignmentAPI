@@ -1,0 +1,75 @@
+@model AssetManagementSystem.Models.LoginModel
+@{
+    ViewBag.Title = "User Login";
+}
+<h1> User Registration </h1>
+    <div class="row">
+    <div class="col-md-12">
+    <form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+    <label asp-for="UserName"></label>
+    <input asp-for="UserName" class="form-control" />
+    <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+    <label asp-for="Password"></label>
+    <input asp-for="Password" class="form-control" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    @* <html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body style="padding-top:20px">
+    <div class="well">
+        <table class="table table-bordered">
+            <thread>
+                <tr class="success">
+                    <td colspan="2">
+                        Login Page
+                    </td>
+                </tr>
+            </thread>
+            <tbody>
+                <tr>
+                    <td>UserName</td>
+                    <td>
+                        <input type="text" id="txtUserName" placeholder="UserName" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>
+                        <input type="password" id="txtPassword" placeholder="Password" />
+                    </td>
+                </tr>
+                <tr class="success">
+                    <td colspan="2">
+                        <input id="btnLogin" class="btn btn-success" type="button" value="Login" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html> *@
