@@ -21,7 +21,19 @@ namespace AssetManagementSystem.Controllers
         [Authorize(Roles = "admin,user")]
         public IActionResult GetAllAssets()
         {
-            return Ok(_asset.GetAllAssets());
+            var assetList = _asset.GetAllAssets();
+            try
+            {
+                if (assetList == null)
+                {
+                    return NotFound("No Assets available,List empty");
+                }
+                return Ok(assetList);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
         [HttpGet]
         [Route("SearchAsset/{search}")]
@@ -29,13 +41,17 @@ namespace AssetManagementSystem.Controllers
         public IActionResult SearchAsset(string search)
         {
             var asset = _asset.SearchAsset(search);
-            if (asset != null)
+            try
             {
-                return Ok(asset);
-            }
-            else
-            {
+                if (asset != null)
+                {
+                    return Ok(asset);
+                }
                 return NotFound("The asset Not available");
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
         }
         [HttpPost]
@@ -44,7 +60,18 @@ namespace AssetManagementSystem.Controllers
         public IActionResult AddAsset(AssetModel asset)
         {
             var asset1 = _asset.AddAsset(asset);
-            return Ok(asset1);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    return Ok(asset1);
+                }
+                return NotFound("Some details not provided");
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
         [HttpGet]
         [Route("Details/{assetType}/{id}")]
@@ -59,14 +86,18 @@ namespace AssetManagementSystem.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult UpdateAsset(AssetModel asset)
         {
-            if (asset != null)
+            try
             {
-                var asset1 = _asset.UpdateAsset(asset);
-                return Ok(asset1);
-            }
-            else
-            {
+                if (Modelstate.IsValid)
+                {
+                    _asset.UpdateAsset(asset);
+                    return Ok("Updated Successfully");
+                }
                 return NotFound("No data");
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
         }
         [HttpDelete]
@@ -82,23 +113,59 @@ namespace AssetManagementSystem.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult AssignAsset([FromBody] AssetAssign assetAssign)
         {
-            _asset.AssignAsset(assetAssign);
-            return Ok("Asset succesfully assigned");
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _asset.AssignAsset(assetAssign);
+                    return Ok("Asset succesfully assigned");
+                }
+                return NotFound();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
         [HttpPut]
         [Route("Admin/UnAssignAsset")]
         [Authorize(Roles = "admin")]
         public IActionResult UnAssignAsset([FromBody] AssetAssign assetAssign)
         {
-            _asset.UnAssignAsset(assetAssign);
-            return Ok("Ässet succesfully unassigned");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _asset.UnAssignAsset(assetAssign);
+                    return Ok("Ässet succesfully unassigned");
+                }
+                return NotFound();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
         [HttpGet]
         [Route("Admin/GetAllRequest")]
         [Authorize(Roles = "admin")]
         public IActionResult AllRequest()
         {
-            return Ok(_asset.GetAllRequest());
+            var requestList = _asset.GetAllRequest();
+            try
+            {
+                if (requestList != null)
+                {
+                    return Ok(requestList);
+                }
+                return NotFound();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
 
         }
     }

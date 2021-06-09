@@ -40,10 +40,17 @@ namespace AssetManagementSystem.Controllers
                 {
                     responseTask = await client.GetAsync(string.Format("SearchAsset/{0}", search));
                 }
-                if (responseTask.IsSuccessStatusCode)
+                try
                 {
-                    var readTask = await responseTask.Content.ReadAsAsync<IList<AssetModel>>();
-                    assetModels = readTask;
+                    if (responseTask.IsSuccessStatusCode)
+                    {
+                        var readTask = await responseTask.Content.ReadAsAsync<IList<AssetModel>>();
+                        assetModels = readTask;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return View(ex.Message);
                 }
             }
             foreach (var Asset in assetModels)
@@ -62,10 +69,17 @@ namespace AssetManagementSystem.Controllers
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", String.Format("{0}", token));
                 var responseTask = await client.GetAsync(String.Format("Details/{0}/{1}", assetType, id));
                 var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    var readTask = result.Content.ReadAsAsync<AssetModel>();
-                    assetModel = readTask;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<AssetModel>();
+                        assetModel = readTask;
+                    }
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("SearchAsset");
                 }
             }
             return View(assetModel);
@@ -84,9 +98,16 @@ namespace AssetManagementSystem.Controllers
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", String.Format("{0}", token));
                 var postTask = await client.PostAsJsonAsync<AssetModel>("AddAsset", assetCreate);
                 var result = postTask;
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    return RedirectToAction("SearchAsset");
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("SearchAsset");
+                    }
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("AddAsset");
                 }
             }
             return View(assetCreate);
@@ -101,10 +122,17 @@ namespace AssetManagementSystem.Controllers
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", String.Format("{0}", token));
                 var responseTask = await client.GetAsync(String.Format("UpdateAsset/{0}/{1}", assetType, id));
                 var result = responseTask;
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    var readTask = result.Content.ReadAsAsync<AssetModel>();
-                    assetModel = readTask;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<AssetModel>();
+                        assetModel = readTask;
+                    }
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("UpdateAsset");
                 }
             }
             return View(assetModel);
@@ -118,9 +146,16 @@ namespace AssetManagementSystem.Controllers
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", String.Format("{0}", token));
                 var putTask = await client.PutAsJsonAsync<AssetModel>("UpdateAsset", assetEdit);
                 var result = putTask;
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    return RedirectToAction("SearchAsset");
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("SearchAsset");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return View(ex.Message);
                 }
             }
             return View(assetEdit);
@@ -134,10 +169,18 @@ namespace AssetManagementSystem.Controllers
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", String.Format("{0}", token));
                 var deleteTask = await client.DeleteAsync(String.Format("DeleteAsset/{0}/{1}", assetType, id));
                 var result = deleteTask;
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    return RedirectToAction("SearchAsset");
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("SearchAsset");
+                    }
                 }
+                catch (Exception ex)
+                {
+                    return View(ex.Message);
+                }
+
             }
             return RedirectToAction("SearchAsset");
         }
@@ -163,10 +206,17 @@ namespace AssetManagementSystem.Controllers
             HttpResponseMessage loginResponse = client.PostAsync("Register", content).Result;
             string loginResult = loginResponse.Content.ReadAsStringAsync().Result;
             loginResult = JsonConvert.DeserializeObject<string>(loginResult);
-            if (loginResult == "Registered Successfully")
+            try
             {
-                return RedirectToAction("Login");
+                if (loginResult == "Registered Successfully")
+                {
+                    return RedirectToAction("Login");
 
+                }
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
             }
             return RedirectToAction("Register");
         }
@@ -190,13 +240,19 @@ namespace AssetManagementSystem.Controllers
                 });
             StringContent content = new StringContent(loginData, System.Text.Encoding.UTF8, "application/json");
             HttpResponseMessage loginResponse = client.PostAsync("Login", content).Result;
-
             string loginResult = loginResponse.Content.ReadAsStringAsync().Result;
             ResponseModel response = JsonConvert.DeserializeObject<ResponseModel>(loginResult);
             token = response.Tokens.ToString();
-            if (response.LoggerMessage == "Login successfully")
+            try
             {
-                return RedirectToAction("SearchAsset");
+                if (response.LoggerMessage == "Login successfully")
+                {
+                    return RedirectToAction("SearchAsset");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
             }
             return RedirectToAction("Login");
         }
@@ -209,10 +265,17 @@ namespace AssetManagementSystem.Controllers
             client.BaseAddress = new Uri("https://localhost:5001/api/AssetManagement/");
             var responseTask = await client.GetAsync("GetAllAssets");
             var result = responseTask;
-            if (result.IsSuccessStatusCode)
+            try
             {
-                var readTask = result.Content.ReadAsAsync<IList<AssetModel>>();
-                assetModels = readTask;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<IList<AssetModel>>();
+                    assetModels = readTask;
+                }
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
             }
             foreach (var Asset in assetModels)
             {
@@ -235,10 +298,17 @@ namespace AssetManagementSystem.Controllers
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", String.Format("{0}", token));
             var postTask = await client.PostAsJsonAsync<AssetAssign>("RequestAsset", assetStatus);
             var result = postTask;
-            if (result.IsSuccessStatusCode)
+            try
             {
-                string message = "request successfully submitted";
-                ViewBag.Message = message;
+                if (result.IsSuccessStatusCode)
+                {
+                    string message = "request successfully submitted";
+                    ViewBag.Message = message;
+                }
+            }
+            catch (Exception ex)
+            {
+                return View(ex.Message);
             }
 
             return RedirectToAction("SearchAsset");
@@ -254,10 +324,17 @@ namespace AssetManagementSystem.Controllers
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", String.Format("{0}", token));
                 var responseTask = await client.GetAsync("GetAllRequest");
                 var result = responseTask;
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    var readTask = result.Content.ReadAsAsync<IList<AssetAssign>>();
-                    assetModels = readTask;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<IList<AssetAssign>>();
+                        assetModels = readTask;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return View(ex.Message);
                 }
             }
             foreach (var Asset in assetModels)
@@ -276,10 +353,17 @@ namespace AssetManagementSystem.Controllers
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", String.Format("{0}", token));
                 var putTask = await client.PutAsJsonAsync<AssetAssign>("AssignAsset", assetAssign);
                 var result = putTask;
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    string message = "assigned successfully submitted";
-                    ViewBag.Message = message;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        string message = "assigned successfully submitted";
+                        ViewBag.Message = message;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return View(ex.Message);
                 }
             }
             return RedirectToAction("SearchAsset");
@@ -293,10 +377,17 @@ namespace AssetManagementSystem.Controllers
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Authorization", String.Format("{0}", token));
                 var putTask = await client.PutAsJsonAsync<AssetAssign>("UnAssignAsset", assetAssign);
                 var result = putTask;
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    string message = "unassigned successfully submitted";
-                    ViewBag.Message = message;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        string message = "unassigned successfully submitted";
+                        ViewBag.Message = message;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return View(ex.Message);
                 }
                 return RedirectToAction("SearchAsset");
             }

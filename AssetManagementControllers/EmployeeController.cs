@@ -35,21 +35,22 @@ namespace AssetManagementSystem.Controllers
                     Email = employee.Email
                 };
                 var result = await userManager.CreateAsync(user, employee.Password);
-                if (result.Succeeded)
+                try
                 {
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return "Registered Successfully";
-                }
-                else
-                {
+                    if (result.Succeeded)
+                    {
+                        await signInManager.SignInAsync(user, isPersistent: false);
+                        return "Registered Successfully";
+                    }
                     return "Details are Incorrect";
-
                 }
+                catch (Exception)
+                {
+                    return "Error Occured";
+                }
+
             }
-            else
-            {
-                return "All Details not provided";
-            }
+            return "All Details not provided";
         }
         [HttpPost]
         [Route("Employee/Login")]
@@ -81,7 +82,6 @@ namespace AssetManagementSystem.Controllers
                 {
                     Tokens = new JwtSecurityTokenHandler().WriteToken(token),
                     Expiration = token.ValidTo,
-                    // User = user.UserName,
                     LoggerMessage = "Login successfully"
 
                 };
@@ -106,8 +106,19 @@ namespace AssetManagementSystem.Controllers
         [Authorize(Roles = "user")]
         public IActionResult Unassign([FromBody] AssetAssign assetAssign)
         {
-            _asset.UnAssignAsset(assetAssign);
-            return Ok("Unassign Request Submitted succesfully");
+            var asset = _asset.UnAssignAsset(assetAssign);
+            try
+            {
+                if (asset != null)
+                {
+                    return Ok("Unassign Request Submitted succesfully");
+                }
+                return NotFound();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
     }
